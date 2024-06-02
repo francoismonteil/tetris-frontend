@@ -11,6 +11,7 @@ const DROP_INTERVAL = 1000; // Adjust this value to control the falling speed (i
 function App() {
   const [gameState, setGameState] = useState(null);
   const [isGameOver, setIsGameOver] = useState(false);
+  const [isPaused, setIsPaused] = useState(false);
   const dropIntervalId = useRef(null);
 
   useEffect(() => {
@@ -18,12 +19,41 @@ function App() {
   }, []);
 
   useEffect(() => {
-    if (gameState && !gameState.gameOver) {
+    if (gameState && !gameState.gameOver && !isPaused) {
       startDropInterval();
     } else {
       stopDropInterval();
     }
-  }, [gameState]);
+  }, [gameState, isPaused]);
+
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (gameState && !gameState.gameOver && !isPaused) {
+        switch (event.key) {
+          case 'ArrowDown':
+            handleAction('/moveDown');
+            break;
+          case 'ArrowLeft':
+            handleAction('/moveLeft');
+            break;
+          case 'ArrowRight':
+            handleAction('/moveRight');
+            break;
+          case 'ArrowUp':
+            handleAction('/rotate');
+            break;
+          default:
+            break;
+        }
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [gameState, isPaused]);
 
   const fetchGameState = async () => {
     try {
@@ -47,10 +77,16 @@ function App() {
     }
   };
 
+  const togglePause = () => {
+    setIsPaused(!isPaused);
+  };
+
   const startDropInterval = () => {
     if (dropIntervalId.current) return;
     dropIntervalId.current = setInterval(() => {
-      handleAction('/moveDown');
+      if (!isPaused && !isGameOver) {
+        handleAction('/moveDown');
+      }
     }, DROP_INTERVAL);
   };
 
@@ -69,7 +105,7 @@ function App() {
           <InfoPanel gameState={gameState} />
           <NextTetromino nextTetromino={gameState?.nextTetromino} />
         </div>
-        <Controls handleAction={handleAction} />
+        <Controls handleAction={handleAction} togglePause={togglePause} isPaused={isPaused} />
         {isGameOver && <HighScoreForm score={gameState?.score} />}
       </div>
   );
