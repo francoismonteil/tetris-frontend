@@ -11,4 +11,4 @@ function InfoPanel({ gameState }) {
     );
 }
 
-export default InfoPanel;
+export default React.memo(InfoPanel);

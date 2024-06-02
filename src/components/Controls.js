@@ -28,4 +28,4 @@ function Controls({ handleAction, togglePause, isPaused }) {
     );
 }
 
-export default Controls;
+export default React.memo(Controls);

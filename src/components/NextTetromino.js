@@ -43,4 +43,4 @@ const NextTetromino = ({ nextTetromino }) => {
     );
 };
 
-export default NextTetromino;
+export default React.memo(NextTetromino);
