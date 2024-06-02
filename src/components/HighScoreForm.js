@@ -10,11 +10,11 @@ function HighScoreForm({ score, onSubmitSuccess, onReplay }) {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ name, score }),
         });
-        onSubmitSuccess(); // Notify parent component that the form was submitted successfully
+        onSubmitSuccess();
     };
 
     const handleClose = () => {
-        onReplay(); // Restart the game when the modal is closed
+        onReplay();
     };
 
     return (

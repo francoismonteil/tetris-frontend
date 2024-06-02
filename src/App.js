@@ -48,22 +48,14 @@ function App() {
   const handleAction = useCallback(async (action) => {
     try {
       const response = await fetch(action, { method: 'POST' });
-      if (!response.ok) {
-        throw new Error(`Request failed with status ${response.status}`);
-      }
+      if (!response.ok) throw new Error(`Request failed with status ${response.status}`);
       const data = await response.json();
       setGameState(data);
       setIsGameOver(data.gameOver);
-      if (action === '/moveDown') {
-        playDropSound();
-      } else if (action === '/moveLeft' || action === '/moveRight') {
-        playMoveSound();
-      } else if (action === '/rotate') {
-        playRotateSound();
-      }
-      if (data.gameOver) {
-        playGameOverSound();
-      }
+      if (action === '/moveDown') playDropSound();
+      else if (action === '/moveLeft' || action === '/moveRight') playMoveSound();
+      else if (action === '/rotate') playRotateSound();
+      if (data.gameOver) playGameOverSound();
     } catch (error) {
       console.error(`Failed to perform action ${action}:`, error);
     }
@@ -71,9 +63,7 @@ function App() {
 
   useDropInterval(handleAction, isPaused, isGameOver);
 
-  const togglePause = useCallback(() => {
-    setIsPaused(!isPaused);
-  }, [isPaused]);
+  const togglePause = useCallback(() => setIsPaused(!isPaused), [isPaused]);
 
   const handleKeyDown = useCallback((event) => {
     if (gameState && !gameState.gameOver && !isPaused) {
@@ -101,9 +91,7 @@ function App() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [handleKeyDown]);
 
-  const handleScoreSubmitSuccess = useCallback(() => {
-    setShowHighScoreForm(false);
-  }, []);
+  const handleScoreSubmitSuccess = useCallback(() => setShowHighScoreForm(false), []);
 
   const handleReplay = useCallback(async () => {
     try {
@@ -133,11 +121,7 @@ function App() {
       <div className="App">
         {isGameStarted ? (
             <>
-              <motion.h1
-                  initial={{ y: -50, opacity: 0 }}
-                  animate={{ y: 0, opacity: 1 }}
-                  transition={{ duration: 0.5 }}
-              >
+              <motion.h1 initial={{ y: -50, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 0.5 }}>
                 Tetris
               </motion.h1>
               <GameContainer>

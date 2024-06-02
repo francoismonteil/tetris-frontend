@@ -1,19 +1,29 @@
 import { useEffect, useRef } from 'react';
 
 const useDropInterval = (handleAction, isPaused, isGameOver) => {
-    const dropIntervalId = useRef(null);
+    const lastDropTimeRef = useRef(Date.now());
+    const dropAnimationFrameId = useRef(null);
+
+    const drop = () => {
+        if (!isPaused && !isGameOver) {
+            const now = Date.now();
+            const elapsed = now - lastDropTimeRef.current;
+
+            if (elapsed >= 1000) {
+                handleAction('/moveDown');
+                lastDropTimeRef.current = now;
+            }
+
+            dropAnimationFrameId.current = requestAnimationFrame(drop);
+        }
+    };
 
     useEffect(() => {
         if (!isPaused && !isGameOver) {
-            dropIntervalId.current = setInterval(() => {
-                handleAction('/moveDown');
-            }, 1000);
-        } else {
-            clearInterval(dropIntervalId.current);
-            dropIntervalId.current = null;
+            dropAnimationFrameId.current = requestAnimationFrame(drop);
         }
 
-        return () => clearInterval(dropIntervalId.current);
+        return () => cancelAnimationFrame(dropAnimationFrameId.current);
     }, [isPaused, isGameOver, handleAction]);
 };
 
