@@ -1,53 +1,39 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import styled from 'styled-components';
 import GameBoard from './components/GameBoard';
 import InfoPanel from './components/InfoPanel';
 import Controls from './components/Controls';
 import HighScoreForm from './components/HighScoreForm';
 import HighScoreTable from './components/HighScoreTable';
 import NextTetromino from './components/NextTetromino';
+import useGameState from './hooks/useGameState';
+import useDropInterval from './hooks/useDropInterval';
 import './App.css';
 
-const DROP_INTERVAL = 1000;
+const GameContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 20px auto;
 
-const useGameState = () => {
-  const [gameState, setGameState] = useState(null);
-  const [isGameOver, setIsGameOver] = useState(false);
-  const [isPaused, setIsPaused] = useState(false);
+  @media (min-width: 600px) {
+    flex-direction: row;
+  }
+`;
 
-  const fetchGameState = async () => {
-    try {
-      const response = await fetch('/gameState');
-      const data = await response.json();
-      setGameState(data);
-      setIsGameOver(data.gameOver);
-    } catch (error) {
-      console.error("Failed to fetch game state:", error);
-    }
-  };
-
-  useEffect(() => {
-    fetchGameState();
-  }, []);
-
-  return { gameState, isGameOver, isPaused, setIsPaused, setGameState, setIsGameOver, fetchGameState };
-};
-
-const useDropInterval = (handleAction, isPaused, isGameOver) => {
-  const dropIntervalId = useRef(null);
-
-  useEffect(() => {
-    if (!isPaused && !isGameOver) {
-      dropIntervalId.current = setInterval(() => {
-        handleAction('/moveDown');
-      }, DROP_INTERVAL);
-    } else {
-      clearInterval(dropIntervalId.current);
-      dropIntervalId.current = null;
-    }
-
-    return () => clearInterval(dropIntervalId.current);
-  }, [isPaused, isGameOver, handleAction]);
-};
+const GameBoardContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  margin: 20px auto;
+  border: 2px solid #ffffff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  position: relative;
+  background-color: #2d2d2d;
+  width: 90vw;
+  max-width: 450px;
+`;
 
 function App() {
   const { gameState, isGameOver, isPaused, setIsPaused, setGameState, setIsGameOver, fetchGameState } = useGameState();
@@ -56,6 +42,9 @@ function App() {
   const handleAction = useCallback(async (action) => {
     try {
       const response = await fetch(action, { method: 'POST' });
+      if (!response.ok) {
+        throw new Error(`Request failed with status ${response.status}`);
+      }
       const data = await response.json();
       setGameState(data);
       setIsGameOver(data.gameOver);
@@ -66,68 +55,74 @@ function App() {
 
   useDropInterval(handleAction, isPaused, isGameOver);
 
-  const togglePause = () => setIsPaused(!isPaused);
+  const togglePause = useCallback(() => {
+    setIsPaused(!isPaused);
+  }, [isPaused]);
 
-  useEffect(() => {
-    const handleKeyDown = (event) => {
-      if (gameState && !gameState.gameOver && !isPaused) {
-        switch (event.key) {
-          case 'ArrowDown':
-            handleAction('/moveDown');
-            break;
-          case 'ArrowLeft':
-            handleAction('/moveLeft');
-            break;
-          case 'ArrowRight':
-            handleAction('/moveRight');
-            break;
-          case 'ArrowUp':
-            handleAction('/rotate');
-            break;
-          default:
-            break;
-        }
+  const handleKeyDown = useCallback((event) => {
+    if (gameState && !gameState.gameOver && !isPaused) {
+      switch (event.key) {
+        case 'ArrowDown':
+          handleAction('/moveDown');
+          break;
+        case 'ArrowLeft':
+          handleAction('/moveLeft');
+          break;
+        case 'ArrowRight':
+          handleAction('/moveRight');
+          break;
+        case 'ArrowUp':
+          handleAction('/rotate');
+          break;
+        default:
+          break;
       }
-    };
-
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
+    }
   }, [gameState, isPaused, handleAction]);
 
-  const handleScoreSubmitSuccess = () => {
-    setShowHighScoreForm(false);
-  };
+  useEffect(() => {
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [handleKeyDown]);
 
-  const handleReplay = async () => {
+  const handleScoreSubmitSuccess = useCallback(() => {
+    setShowHighScoreForm(false);
+  }, []);
+
+  const handleReplay = useCallback(async () => {
     try {
       await fetch('/restart', { method: 'POST' });
       setShowHighScoreForm(true);
-      fetchGameState(); // Reset the game state
-      setIsGameOver(false); // Reset the game over state
+      fetchGameState();
+      setIsGameOver(false);
     } catch (error) {
       console.error('Failed to restart the game:', error);
     }
-  };
+  }, [fetchGameState]);
+
+  const highScoreForm = useMemo(() => (
+      <HighScoreForm score={gameState?.score} onSubmitSuccess={handleScoreSubmitSuccess} />
+  ), [gameState, handleScoreSubmitSuccess]);
+
+  const highScoreTable = useMemo(() => (
+      <HighScoreTable onReplay={handleReplay} />
+  ), [handleReplay]);
 
   return (
       <div className="App">
         <h1>Tetris</h1>
-        <div className="game-container">
-          {isGameOver ? (
-              showHighScoreForm ? (
-                  <HighScoreForm score={gameState?.score} onSubmitSuccess={handleScoreSubmitSuccess} />
-              ) : (
-                  <HighScoreTable onReplay={handleReplay} />
-              )
-          ) : (
+        <GameContainer>
+          {isGameOver ? (showHighScoreForm ? highScoreForm : highScoreTable) : (
               <>
-                <GameBoard gameState={gameState} />
+                <GameBoardContainer>
+                  <GameBoard gameState={gameState} />
+                </GameBoardContainer>
                 <InfoPanel gameState={gameState} />
                 <NextTetromino nextTetromino={gameState?.nextTetromino} />
                 <Controls handleAction={handleAction} togglePause={togglePause} isPaused={isPaused} />
               </>
           )}
-        </div>
+        </GameContainer>
       </div>
   );
 }

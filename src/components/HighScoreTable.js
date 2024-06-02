@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import './../css/HighScoreTable.css'; // Assurez-vous d'importer le fichier CSS
+import './../css/HighScoreTable.css';
 
 function HighScoreTable({ onReplay }) {
     const [scores, setScores] = useState([]);
