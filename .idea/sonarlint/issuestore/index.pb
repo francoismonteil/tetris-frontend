@@ -53,3 +53,9 @@ D
 src/hooks/useDraw.js,b\c\bc57ac0c92e9e097d9f320a5835dc3a9d5e784e8
 U
 %src/components/ParticlesBackground.js,a\2\a2b04547e6ebe067801420c0735cf84c293034e1
+F
+src/hooks/useSounds.js,c\e\ce38a4537f64f46787f05dd073b612e8bd127ced
+L
+src/contexts/ThemeContext.js,2\a\2ad4a1c6f7f861a641e681ce4602fd77f1fab210
+M
+src/components/StartScreen.js,d\a\dab19118e272b4d6a4cf899b0880ba84afd57ee1

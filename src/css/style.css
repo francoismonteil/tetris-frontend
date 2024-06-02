@@ -15,6 +15,16 @@ body {
     transition: background-color 0.3s ease;
 }
 
+body.dark {
+    background: linear-gradient(135deg, #1e1e1e 0%, #282c34 100%);
+    color: #ffffff;
+}
+
+body.light {
+    background: linear-gradient(135deg, #ffffff 0%, #f0f0f0 100%);
+    color: #000000;
+}
+
 .App {
     text-align: center;
     display: flex;
@@ -250,4 +260,16 @@ h1 {
 
 #high-score-form button:hover {
     background: linear-gradient(135deg, #21a1f1 0%, #61dafb 100%);
+}
+
+button {
+    margin: 10px;
+    padding: 10px 20px;
+    border: none;
+    background: linear-gradient(135deg, #61dafb 0%, #21a1f1 100%);
+    color: #1e1e1e;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    border-radius: 5px;
 }

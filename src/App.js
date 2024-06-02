@@ -7,8 +7,10 @@ import Controls from './components/Controls';
 import HighScoreForm from './components/HighScoreForm';
 import HighScoreTable from './components/HighScoreTable';
 import NextTetromino from './components/NextTetromino';
+import StartScreen from './components/StartScreen';
 import useGameState from './hooks/useGameState';
 import useDropInterval from './hooks/useDropInterval';
+import useSounds from './hooks/useSounds';
 import './App.css';
 
 const GameContainer = styled.div`
@@ -40,6 +42,8 @@ const GameBoardContainer = styled.div`
 function App() {
   const { gameState, isGameOver, isPaused, setIsPaused, setGameState, setIsGameOver, fetchGameState } = useGameState();
   const [showHighScoreForm, setShowHighScoreForm] = useState(true);
+  const [isGameStarted, setIsGameStarted] = useState(false);
+  const { playMoveSound, playRotateSound, playDropSound, playGameOverSound } = useSounds();
 
   const handleAction = useCallback(async (action) => {
     try {
@@ -50,10 +54,20 @@ function App() {
       const data = await response.json();
       setGameState(data);
       setIsGameOver(data.gameOver);
+      if (action === '/moveDown') {
+        playDropSound();
+      } else if (action === '/moveLeft' || action === '/moveRight') {
+        playMoveSound();
+      } else if (action === '/rotate') {
+        playRotateSound();
+      }
+      if (data.gameOver) {
+        playGameOverSound();
+      }
     } catch (error) {
       console.error(`Failed to perform action ${action}:`, error);
     }
-  }, [setGameState, setIsGameOver]);
+  }, [setGameState, setIsGameOver, playMoveSound, playRotateSound, playDropSound, playGameOverSound]);
 
   useDropInterval(handleAction, isPaused, isGameOver);
 
@@ -102,6 +116,11 @@ function App() {
     }
   }, [fetchGameState]);
 
+  const startGame = () => {
+    setIsGameStarted(true);
+    fetchGameState();
+  };
+
   const highScoreForm = useMemo(() => (
       <HighScoreForm score={gameState?.score} onSubmitSuccess={handleScoreSubmitSuccess} onReplay={handleReplay} />
   ), [gameState, handleScoreSubmitSuccess, handleReplay]);
@@ -112,25 +131,31 @@ function App() {
 
   return (
       <div className="App">
-        <motion.h1
-            initial={{ y: -50, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ duration: 0.5 }}
-        >
-          Tetris
-        </motion.h1>
-        <GameContainer>
-          {isGameOver ? (showHighScoreForm ? highScoreForm : highScoreTable) : (
-              <>
-                <GameBoardContainer>
-                  <GameBoard gameState={gameState} />
-                </GameBoardContainer>
-                <InfoPanel gameState={gameState} />
-                <NextTetromino nextTetromino={gameState?.nextTetromino} />
-                <Controls handleAction={handleAction} togglePause={togglePause} isPaused={isPaused} />
-              </>
-          )}
-        </GameContainer>
+        {isGameStarted ? (
+            <>
+              <motion.h1
+                  initial={{ y: -50, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  transition={{ duration: 0.5 }}
+              >
+                Tetris
+              </motion.h1>
+              <GameContainer>
+                {isGameOver ? (showHighScoreForm ? highScoreForm : highScoreTable) : (
+                    <>
+                      <GameBoardContainer>
+                        <GameBoard gameState={gameState} />
+                      </GameBoardContainer>
+                      <InfoPanel gameState={gameState} />
+                      <NextTetromino nextTetromino={gameState?.nextTetromino} />
+                      <Controls handleAction={handleAction} togglePause={togglePause} isPaused={isPaused} />
+                    </>
+                )}
+              </GameContainer>
+            </>
+        ) : (
+            <StartScreen onStart={startGame} />
+        )}
       </div>
   );
 }
