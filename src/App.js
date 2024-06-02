@@ -3,6 +3,7 @@ import GameBoard from './components/GameBoard';
 import InfoPanel from './components/InfoPanel';
 import Controls from './components/Controls';
 import HighScoreForm from './components/HighScoreForm';
+import HighScoreTable from './components/HighScoreTable';
 import NextTetromino from './components/NextTetromino';
 import './App.css';
 
@@ -28,7 +29,7 @@ const useGameState = () => {
     fetchGameState();
   }, []);
 
-  return { gameState, isGameOver, isPaused, setIsPaused, setGameState, setIsGameOver };
+  return { gameState, isGameOver, isPaused, setIsPaused, setGameState, setIsGameOver, fetchGameState };
 };
 
 const useDropInterval = (handleAction, isPaused, isGameOver) => {
@@ -49,7 +50,8 @@ const useDropInterval = (handleAction, isPaused, isGameOver) => {
 };
 
 function App() {
-  const { gameState, isGameOver, isPaused, setIsPaused, setGameState, setIsGameOver } = useGameState();
+  const { gameState, isGameOver, isPaused, setIsPaused, setGameState, setIsGameOver, fetchGameState } = useGameState();
+  const [showHighScoreForm, setShowHighScoreForm] = useState(true);
 
   const handleAction = useCallback(async (action) => {
     try {
@@ -92,16 +94,40 @@ function App() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [gameState, isPaused, handleAction]);
 
+  const handleScoreSubmitSuccess = () => {
+    setShowHighScoreForm(false);
+  };
+
+  const handleReplay = async () => {
+    try {
+      await fetch('/restart', { method: 'POST' });
+      setShowHighScoreForm(true);
+      fetchGameState(); // Reset the game state
+      setIsGameOver(false); // Reset the game over state
+    } catch (error) {
+      console.error('Failed to restart the game:', error);
+    }
+  };
+
   return (
       <div className="App">
         <h1>Tetris</h1>
         <div className="game-container">
-          <GameBoard gameState={gameState} />
-          <InfoPanel gameState={gameState} />
-          <NextTetromino nextTetromino={gameState?.nextTetromino} />
+          {isGameOver ? (
+              showHighScoreForm ? (
+                  <HighScoreForm score={gameState?.score} onSubmitSuccess={handleScoreSubmitSuccess} />
+              ) : (
+                  <HighScoreTable onReplay={handleReplay} />
+              )
+          ) : (
+              <>
+                <GameBoard gameState={gameState} />
+                <InfoPanel gameState={gameState} />
+                <NextTetromino nextTetromino={gameState?.nextTetromino} />
+                <Controls handleAction={handleAction} togglePause={togglePause} isPaused={isPaused} />
+              </>
+          )}
         </div>
-        <Controls handleAction={handleAction} togglePause={togglePause} isPaused={isPaused} />
-        {isGameOver && <HighScoreForm score={gameState?.score} />}
       </div>
   );
 }

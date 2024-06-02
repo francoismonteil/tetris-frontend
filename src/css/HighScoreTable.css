@@ -1,0 +1,69 @@
+/* Ajout des styles pour le tableau des scores */
+
+#high-score-table {
+    margin: 20px auto;
+    max-width: 600px;
+    background-color: #282c34;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    overflow: hidden;
+    color: #ffffff;
+    font-family: 'Roboto', sans-serif;
+}
+
+#high-score-table h2 {
+    background-color: #61dafb;
+    color: #1e1e1e;
+    margin: 0;
+    padding: 20px;
+    text-align: center;
+    font-size: 24px;
+}
+
+#high-score-table table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+#high-score-table th, #high-score-table td {
+    padding: 15px;
+    text-align: center;
+}
+
+#high-score-table th {
+    background-color: #444;
+    color: #fff;
+}
+
+#high-score-table tr:nth-child(even) {
+    background-color: #333;
+}
+
+#high-score-table tr:nth-child(odd) {
+    background-color: #2d2d2d;
+}
+
+#high-score-table td {
+    border-bottom: 1px solid #444;
+}
+
+#high-score-table tr:hover {
+    background-color: #555;
+    transition: background-color 0.3s ease;
+}
+
+.replay-button {
+    margin: 20px auto;
+    padding: 10px 20px;
+    border: none;
+    background-color: #61dafb;
+    color: #1e1e1e;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    display: block;
+}
+
+.replay-button:hover {
+    background-color: #21a1f1;
+}

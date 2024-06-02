@@ -43,3 +43,7 @@ F
 src/reportWebVitals.js,1\c\1ce5e63ae1582ed0b425c46001299a07515efbf9
 A
 src/setupTests.js,b\7\b7e8d8f421068b8d51c89805d2035e747be2ff17
+P
+ src/components/HighScoreTable.js,7\9\790b5877a677c484f9f65d36bfe9d6dbfae2bbd0
+J
+src/css/HighScoreTable.css,e\a\ea38bebb808f551e54d0e0f366e7750c15888c70

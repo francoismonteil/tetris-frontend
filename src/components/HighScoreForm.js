@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-function HighScoreForm({ score }) {
+function HighScoreForm({ score, onSubmitSuccess }) {
     const [name, setName] = useState('');
 
     const handleSubmit = async (event) => {
@@ -10,7 +10,7 @@ function HighScoreForm({ score }) {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ name, score }),
         });
-        window.location.href = '/scores';
+        onSubmitSuccess(); // Notify parent component that the form was submitted successfully
     };
 
     return (
