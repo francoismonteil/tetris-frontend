@@ -23,7 +23,7 @@ const useDrawGameBoard = (gameState) => {
         gameBoard.forEach((row, y) => {
             row.forEach((cell, x) => {
                 if (cell !== 0) {
-                    context.fillStyle = 'gray';
+                    context.fillStyle = getColor(cell);
                     context.fillRect(x * blockSize, y * blockSize, blockSize, blockSize);
                     context.strokeRect(x * blockSize, y * blockSize, blockSize, blockSize);
                 }
@@ -34,12 +34,25 @@ const useDrawGameBoard = (gameState) => {
             currentTetromino.shape.forEach((row, i) => {
                 row.forEach((cell, j) => {
                     if (cell !== 0) {
-                        context.fillStyle = 'red';
+                        context.fillStyle = getColor(currentTetromino.type);
                         context.fillRect((currentTetromino.x + j) * blockSize, (currentTetromino.y + i) * blockSize, blockSize, blockSize);
                         context.strokeRect((currentTetromino.x + j) * blockSize, (currentTetromino.y + i) * blockSize, blockSize, blockSize);
                     }
                 });
             });
+        }
+    };
+
+    const getColor = (type) => {
+        switch (type) {
+            case 'I': return 'cyan';
+            case 'J': return 'blue';
+            case 'L': return 'orange';
+            case 'O': return 'yellow';
+            case 'S': return 'green';
+            case 'T': return 'purple';
+            case 'Z': return 'red';
+            default: return 'gray';
         }
     };
 

@@ -2,7 +2,7 @@ import React, { useRef, useEffect } from 'react';
 
 function NextTetromino({ nextTetromino }) {
     const canvasRef = useRef(null);
-    const blockSize = 30; // Adjust this based on the size you want for the preview
+    const blockSize = 30;
 
     useEffect(() => {
         drawNextTetromino();
@@ -19,12 +19,25 @@ function NextTetromino({ nextTetromino }) {
         nextTetromino.shape.forEach((row, i) => {
             row.forEach((cell, j) => {
                 if (cell !== 0) {
-                    context.fillStyle = 'red'; // You can change the color based on tetromino type
+                    context.fillStyle = getColor(nextTetromino.type);
                     context.fillRect(j * blockSize, i * blockSize, blockSize, blockSize);
                     context.strokeRect(j * blockSize, i * blockSize, blockSize, blockSize);
                 }
             });
         });
+    };
+
+    const getColor = (type) => {
+        switch (type) {
+            case 'I': return 'cyan';
+            case 'J': return 'blue';
+            case 'L': return 'orange';
+            case 'O': return 'yellow';
+            case 'S': return 'green';
+            case 'T': return 'purple';
+            case 'Z': return 'red';
+            default: return 'gray';
+        }
     };
 
     return (
