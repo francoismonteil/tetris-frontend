@@ -1,5 +1,3 @@
-/* style.css */
-
 body {
     background-color: #1e1e1e;
     color: #ffffff;
@@ -11,39 +9,114 @@ body {
     align-items: center;
     justify-content: center;
     height: 100vh;
+    transition: background-color 0.3s ease;
 }
 
 .App {
     text-align: center;
-}
-
-.App-header {
-    background-color: #282c34;
-    min-height: 100vh;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    font-size: calc(10px + 2vmin);
-    color: white;
 }
 
-.App-link {
+h1 {
+    font-size: 3em;
+    margin: 20px 0;
     color: #61dafb;
+    text-shadow: 2px 2px #282c34;
 }
 
-.game-container {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+#controls button {
+    margin: 5px;
+    padding: 10px 20px;
+    border: none;
+    background-color: #61dafb;
+    color: #1e1e1e;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s;
+    border-radius: 5px;
+}
+
+#controls button:hover {
+    background-color: #21a1f1;
+    transform: scale(1.05);
+}
+
+#high-score-table {
     margin: 20px auto;
+    max-width: 600px;
+    background-color: #282c34;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    overflow: hidden;
+    color: #ffffff;
+    font-family: 'Roboto', sans-serif;
 }
 
-@media (min-width: 600px) {
-    .game-container {
-        flex-direction: row;
-    }
+#high-score-table h2 {
+    background-color: #61dafb;
+    color: #1e1e1e;
+    margin: 0;
+    padding: 20px;
+    text-align: center;
+    font-size: 24px;
+}
+
+#high-score-table table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+#high-score-table th, #high-score-table td {
+    padding: 15px;
+    text-align: center;
+}
+
+#high-score-table th {
+    background-color: #444;
+    color: #fff;
+}
+
+#high-score-table tr:nth-child(even) {
+    background-color: #333;
+}
+
+#high-score-table tr:nth-child(odd) {
+    background-color: #2d2d2d;
+}
+
+#high-score-table td {
+    border-bottom: 1px solid #444;
+}
+
+#high-score-table tr:hover {
+    background-color: #555;
+    transition: background-color 0.3s ease;
+}
+
+#next-tetromino-container {
+    margin-top: 20px;
+    text-align: center;
+    width: 90vw;
+    max-width: 150px;
+}
+
+#next-tetromino {
+    display: block;
+    border: 2px solid #ffffff;
+    background-color: #2d2d2d;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    width: 100%;
+}
+
+#info-panel {
+    margin: 20px;
+    text-align: left;
+    background-color: #282c34;
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
 
 #game-board-container {
@@ -57,6 +130,7 @@ body {
     background-color: #2d2d2d;
     width: 90vw;
     max-width: 450px;
+    border-radius: 10px;
 }
 
 #game-board {
@@ -64,6 +138,7 @@ body {
     display: block;
     background-color: #000000;
     width: 100%;
+    border-radius: 10px;
 }
 
 .cell {
@@ -75,10 +150,6 @@ body {
 
 .cell.filled {
     background-color: gray;
-}
-
-.cell.tetromino {
-    background-color: red; /* Change color based on tetromino type */
 }
 
 .tetromino-I {
@@ -109,57 +180,6 @@ body {
     background-color: red;
 }
 
-#next-tetromino-container {
-    margin-top: 20px;
-    text-align: center;
-    width: 90vw;
-    max-width: 150px;
-}
-
-#next-tetromino {
-    display: block;
-    border: 2px solid #ffffff;
-    background-color: #2d2d2d;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-    width: 100%;
-}
-
-#info-panel {
-    margin: 20px;
-    text-align: left;
-}
-
-#controls {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    margin: 20px;
-}
-
-#controls button {
-    margin: 5px;
-    padding: 10px 20px;
-    border: none;
-    background-color: #61dafb;
-    color: #1e1e1e;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    flex: 1 1 calc(50% - 10px);
-    max-width: calc(50% - 10px);
-}
-
-#controls button:hover {
-    background-color: #21a1f1;
-}
-
-@media (min-width: 600px) {
-    #controls button {
-        flex: 1 1 auto;
-        max-width: none;
-    }
-}
-
 #high-score-modal {
     position: fixed;
     top: 0;
@@ -177,6 +197,10 @@ body {
     padding: 20px;
     border-radius: 10px;
     text-align: center;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    position: relative;
+    max-width: 400px;
+    width: 100%;
 }
 
 .modal-content .close {
@@ -203,6 +227,8 @@ body {
     margin-bottom: 20px;
     border: none;
     border-radius: 5px;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 #high-score-form button {
@@ -213,8 +239,23 @@ body {
     font-size: 16px;
     cursor: pointer;
     transition: background-color 0.3s ease;
+    border-radius: 5px;
 }
 
 #high-score-form button:hover {
     background-color: #21a1f1;
+}
+
+.overlay {
+    position: relative;
+    z-index: 1;
+}
+
+#tsparticles {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
 }

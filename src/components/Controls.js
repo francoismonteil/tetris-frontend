@@ -1,14 +1,22 @@
 import React from 'react';
+import { motion } from 'framer-motion';
 
 function Controls({ handleAction, togglePause, isPaused }) {
     return (
         <div id="controls">
-            <button onClick={() => handleAction('/moveDown')}>Move Down</button>
-            <button onClick={() => handleAction('/moveLeft')}>Move Left</button>
-            <button onClick={() => handleAction('/moveRight')}>Move Right</button>
-            <button onClick={() => handleAction('/rotate')}>Rotate</button>
-            <button onClick={() => handleAction('/restart')}>Restart</button>
-            <button onClick={togglePause}>{isPaused ? 'Resume' : 'Pause'}</button>
+            {['Move Down', 'Move Left', 'Move Right', 'Rotate', 'Restart'].map(action => (
+                <motion.button
+                    key={action}
+                    onClick={() => handleAction(`/${action.toLowerCase().replace(' ', '')}`)}
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.9 }}
+                >
+                    {action}
+                </motion.button>
+            ))}
+            <motion.button onClick={togglePause} whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
+                {isPaused ? 'Resume' : 'Pause'}
+            </motion.button>
         </div>
     );
 }

@@ -7,7 +7,7 @@ const useDropInterval = (handleAction, isPaused, isGameOver) => {
         if (!isPaused && !isGameOver) {
             dropIntervalId.current = setInterval(() => {
                 handleAction('/moveDown');
-            }, 1000); // DROP_INTERVAL is now directly used
+            }, 1000);
         } else {
             clearInterval(dropIntervalId.current);
             dropIntervalId.current = null;

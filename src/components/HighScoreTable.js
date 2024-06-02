@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './../css/HighScoreTable.css';
+import { motion } from 'framer-motion';
 
 function HighScoreTable({ onReplay }) {
     const [scores, setScores] = useState([]);
@@ -23,7 +24,12 @@ function HighScoreTable({ onReplay }) {
     }, []);
 
     return (
-        <div id="high-score-table">
+        <motion.div
+            id="high-score-table"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5 }}
+        >
             <h2>High Scores</h2>
             <table>
                 <thead>
@@ -43,8 +49,10 @@ function HighScoreTable({ onReplay }) {
                 ))}
                 </tbody>
             </table>
-            <button className="replay-button" onClick={onReplay}>Rejouer</button>
-        </div>
+            <motion.button className="replay-button" onClick={onReplay} whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
+                Rejouer
+            </motion.button>
+        </motion.div>
     );
 }
 

@@ -1,5 +1,6 @@
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import styled from 'styled-components';
+import {motion} from 'framer-motion';
 import GameBoard from './components/GameBoard';
 import InfoPanel from './components/InfoPanel';
 import Controls from './components/Controls';
@@ -33,6 +34,7 @@ const GameBoardContainer = styled.div`
   background-color: #2d2d2d;
   width: 90vw;
   max-width: 450px;
+  border-radius: 10px;
 `;
 
 function App() {
@@ -101,25 +103,32 @@ function App() {
   }, [fetchGameState]);
 
   const highScoreForm = useMemo(() => (
-      <HighScoreForm score={gameState?.score} onSubmitSuccess={handleScoreSubmitSuccess} />
+      <HighScoreForm score={gameState?.score} onSubmitSuccess={handleScoreSubmitSuccess} className="overlay" />
   ), [gameState, handleScoreSubmitSuccess]);
 
   const highScoreTable = useMemo(() => (
-      <HighScoreTable onReplay={handleReplay} />
+      <HighScoreTable onReplay={handleReplay} className="overlay" />
   ), [handleReplay]);
 
   return (
       <div className="App">
-        <h1>Tetris</h1>
-        <GameContainer>
+        <motion.h1
+            initial={{ y: -50, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ duration: 0.5 }}
+            className="overlay"
+        >
+          Tetris
+        </motion.h1>
+        <GameContainer className="overlay">
           {isGameOver ? (showHighScoreForm ? highScoreForm : highScoreTable) : (
               <>
-                <GameBoardContainer>
+                <GameBoardContainer className="overlay">
                   <GameBoard gameState={gameState} />
                 </GameBoardContainer>
-                <InfoPanel gameState={gameState} />
-                <NextTetromino nextTetromino={gameState?.nextTetromino} />
-                <Controls handleAction={handleAction} togglePause={togglePause} isPaused={isPaused} />
+                <InfoPanel gameState={gameState} className="overlay" />
+                <NextTetromino nextTetromino={gameState?.nextTetromino} className="overlay" />
+                <Controls handleAction={handleAction} togglePause={togglePause} isPaused={isPaused} className="overlay" />
               </>
           )}
         </GameContainer>
