@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import GameBoard from './components/GameBoard';
 import InfoPanel from './components/InfoPanel';
 import Controls from './components/Controls';
@@ -6,25 +6,65 @@ import HighScoreForm from './components/HighScoreForm';
 import NextTetromino from './components/NextTetromino';
 import './App.css';
 
-const DROP_INTERVAL = 1000; // Adjust this value to control the falling speed (in milliseconds)
+const DROP_INTERVAL = 1000;
 
-function App() {
+const useGameState = () => {
   const [gameState, setGameState] = useState(null);
   const [isGameOver, setIsGameOver] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
-  const dropIntervalId = useRef(null);
+
+  const fetchGameState = async () => {
+    try {
+      const response = await fetch('/gameState');
+      const data = await response.json();
+      setGameState(data);
+      setIsGameOver(data.gameOver);
+    } catch (error) {
+      console.error("Failed to fetch game state:", error);
+    }
+  };
 
   useEffect(() => {
     fetchGameState();
   }, []);
 
+  return { gameState, isGameOver, isPaused, setIsPaused, setGameState, setIsGameOver };
+};
+
+const useDropInterval = (handleAction, isPaused, isGameOver) => {
+  const dropIntervalId = useRef(null);
+
   useEffect(() => {
-    if (gameState && !gameState.gameOver && !isPaused) {
-      startDropInterval();
+    if (!isPaused && !isGameOver) {
+      dropIntervalId.current = setInterval(() => {
+        handleAction('/moveDown');
+      }, DROP_INTERVAL);
     } else {
-      stopDropInterval();
+      clearInterval(dropIntervalId.current);
+      dropIntervalId.current = null;
     }
-  }, [gameState, isPaused]);
+
+    return () => clearInterval(dropIntervalId.current);
+  }, [isPaused, isGameOver, handleAction]);
+};
+
+function App() {
+  const { gameState, isGameOver, isPaused, setIsPaused, setGameState, setIsGameOver } = useGameState();
+
+  const handleAction = useCallback(async (action) => {
+    try {
+      const response = await fetch(action, { method: 'POST' });
+      const data = await response.json();
+      setGameState(data);
+      setIsGameOver(data.gameOver);
+    } catch (error) {
+      console.error(`Failed to perform action ${action}:`, error);
+    }
+  }, [setGameState, setIsGameOver]);
+
+  useDropInterval(handleAction, isPaused, isGameOver);
+
+  const togglePause = () => setIsPaused(!isPaused);
 
   useEffect(() => {
     const handleKeyDown = (event) => {
@@ -49,53 +89,8 @@ function App() {
     };
 
     window.addEventListener('keydown', handleKeyDown);
-
-    return () => {
-      window.removeEventListener('keydown', handleKeyDown);
-    };
-  }, [gameState, isPaused]);
-
-  const fetchGameState = async () => {
-    try {
-      const response = await fetch('/gameState');
-      const data = await response.json();
-      setGameState(data);
-      setIsGameOver(data.gameOver);
-    } catch (error) {
-      console.error("Failed to fetch game state:", error);
-    }
-  };
-
-  const handleAction = async (action) => {
-    try {
-      const response = await fetch(action, { method: 'POST' });
-      const data = await response.json();
-      setGameState(data);
-      setIsGameOver(data.gameOver);
-    } catch (error) {
-      console.error(`Failed to perform action ${action}:`, error);
-    }
-  };
-
-  const togglePause = () => {
-    setIsPaused(!isPaused);
-  };
-
-  const startDropInterval = () => {
-    if (dropIntervalId.current) return;
-    dropIntervalId.current = setInterval(() => {
-      if (!isPaused && !isGameOver) {
-        handleAction('/moveDown');
-      }
-    }, DROP_INTERVAL);
-  };
-
-  const stopDropInterval = () => {
-    if (dropIntervalId.current) {
-      clearInterval(dropIntervalId.current);
-      dropIntervalId.current = null;
-    }
-  };
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [gameState, isPaused, handleAction]);
 
   return (
       <div className="App">

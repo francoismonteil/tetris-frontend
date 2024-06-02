@@ -31,3 +31,15 @@ S
 :
 
 .gitignore,a\5\a5cc2925ca8258af241be7e5b0381edf30266302
+D
+public/manifest.json,4\2\42e89cd2213b9d5dfae4f63522702c623170d792
+A
+public/robots.txt,d\a\dac799070c2d0c2fa24462b02c1f2dcc3fb3a1e9
+;
+src/App.css,a\a\aa7165aefcf8ee3d73539e99ab007daf1aa18d8d
+=
+src/index.css,c\5\c5d38a62d1faae90a2acaa34b79a7ef365c917e4
+F
+src/reportWebVitals.js,1\c\1ce5e63ae1582ed0b425c46001299a07515efbf9
+A
+src/setupTests.js,b\7\b7e8d8f421068b8d51c89805d2035e747be2ff17

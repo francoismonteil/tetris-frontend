@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 
-function GameBoard({ gameState }) {
+const useDrawGameBoard = (gameState) => {
     const canvasRef = useRef(null);
 
     useEffect(() => {
@@ -20,7 +20,6 @@ function GameBoard({ gameState }) {
 
         context.clearRect(0, 0, canvas.width, canvas.height);
 
-        // Draw the game board
         gameBoard.forEach((row, y) => {
             row.forEach((cell, x) => {
                 if (cell !== 0) {
@@ -31,12 +30,11 @@ function GameBoard({ gameState }) {
             });
         });
 
-        // Draw the current tetromino
         if (currentTetromino) {
             currentTetromino.shape.forEach((row, i) => {
                 row.forEach((cell, j) => {
                     if (cell !== 0) {
-                        context.fillStyle = 'red'; // You can change the color based on tetromino type
+                        context.fillStyle = 'red';
                         context.fillRect((currentTetromino.x + j) * blockSize, (currentTetromino.y + i) * blockSize, blockSize, blockSize);
                         context.strokeRect((currentTetromino.x + j) * blockSize, (currentTetromino.y + i) * blockSize, blockSize, blockSize);
                     }
@@ -44,6 +42,12 @@ function GameBoard({ gameState }) {
             });
         }
     };
+
+    return canvasRef;
+};
+
+function GameBoard({ gameState }) {
+    const canvasRef = useDrawGameBoard(gameState);
 
     return (
         <div id="game-board-container">
