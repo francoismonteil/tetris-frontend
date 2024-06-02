@@ -1,69 +1,103 @@
-/* Ajout des styles pour le tableau des scores */
-
 #high-score-table {
+    max-width: 800px;
     margin: 20px auto;
-    max-width: 600px;
+    padding: 20px;
     background-color: #282c34;
     border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-    overflow: hidden;
-    color: #ffffff;
-    font-family: 'Roboto', sans-serif;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+    color: #fff;
+    font-family: 'Arial', sans-serif;
 }
 
-#high-score-table h2 {
-    background-color: #61dafb;
-    color: #1e1e1e;
-    margin: 0;
-    padding: 20px;
+.high-score-title {
     text-align: center;
-    font-size: 24px;
+    margin-bottom: 20px;
+    font-size: 2em;
+    color: #61dafb;
 }
 
-#high-score-table table {
+.table-container {
     width: 100%;
     border-collapse: collapse;
 }
 
-#high-score-table th, #high-score-table td {
+.table-header, .table-body {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+}
+
+.table-row-container {
+    display: table-row;
+}
+
+.table-row {
+    display: flex;
+    justify-content: space-between;
+}
+
+.table-row:nth-child(odd) {
+    background-color: #2c2f33;
+}
+
+.table-row:nth-child(even) {
+    background-color: #3b3f44;
+}
+
+.table-cell {
+    flex: 1;
     padding: 15px;
-    text-align: center;
-}
-
-#high-score-table th {
-    background-color: #444;
-    color: #fff;
-}
-
-#high-score-table tr:nth-child(even) {
-    background-color: #333;
-}
-
-#high-score-table tr:nth-child(odd) {
-    background-color: #2d2d2d;
-}
-
-#high-score-table td {
     border-bottom: 1px solid #444;
+    text-align: center;
+    font-size: 1em;
 }
 
-#high-score-table tr:hover {
-    background-color: #555;
-    transition: background-color 0.3s ease;
+.table-header .table-cell {
+    font-weight: bold;
+    background-color: #1c1f23;
+    font-size: 1.2em;
 }
 
 .replay-button {
+    display: block;
     margin: 20px auto;
     padding: 10px 20px;
     border: none;
-    background-color: #61dafb;
-    color: #1e1e1e;
-    font-size: 16px;
+    background: linear-gradient(135deg, #61dafb 0%, #21a1f1 100%);
+    color: #282c34;
+    font-size: 1em;
     cursor: pointer;
-    transition: background-color 0.3s ease;
-    display: block;
+    transition: background 0.3s ease, transform 0.2s;
+    border-radius: 5px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
 }
 
 .replay-button:hover {
+    background: linear-gradient(135deg, #21a1f1 0%, #61dafb 100%);
+    transform: scale(1.05);
+}
+
+/* Custom scrollbar styles */
+.table-body {
+    overflow-y: auto;
+    max-height: 400px;
+}
+
+.table-body::-webkit-scrollbar {
+    width: 12px;
+}
+
+.table-body::-webkit-scrollbar-track {
+    background: #1c1f23;
+    border-radius: 10px;
+}
+
+.table-body::-webkit-scrollbar-thumb {
+    background-color: #61dafb;
+    border-radius: 10px;
+    border: 3px solid #1c1f23;
+}
+
+.table-body::-webkit-scrollbar-thumb:hover {
     background-color: #21a1f1;
 }
