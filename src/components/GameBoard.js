@@ -16,7 +16,7 @@ const useDrawGameBoard = (gameState) => {
         if (!gameState || !gameState.gameBoard) return;
 
         const { gameBoard, currentTetromino } = gameState;
-        const blockSize = 30;
+        const blockSize = canvas.width / gameBoard[0].length;
 
         context.clearRect(0, 0, canvas.width, canvas.height);
 

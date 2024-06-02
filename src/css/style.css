@@ -34,9 +34,16 @@ body {
 
 .game-container {
     display: flex;
+    flex-direction: column;
     justify-content: center;
-    align-items: flex-start;
+    align-items: center;
     margin: 20px auto;
+}
+
+@media (min-width: 600px) {
+    .game-container {
+        flex-direction: row;
+    }
 }
 
 #game-board-container {
@@ -48,12 +55,15 @@ body {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
     position: relative;
     background-color: #2d2d2d;
+    width: 90vw;
+    max-width: 450px;
 }
 
 #game-board {
     border: 2px solid #ffffff;
     display: block;
     background-color: #000000;
+    width: 100%;
 }
 
 .cell {
@@ -102,6 +112,8 @@ body {
 #next-tetromino-container {
     margin-top: 20px;
     text-align: center;
+    width: 90vw;
+    max-width: 150px;
 }
 
 #next-tetromino {
@@ -109,6 +121,7 @@ body {
     border: 2px solid #ffffff;
     background-color: #2d2d2d;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    width: 100%;
 }
 
 #info-panel {
@@ -118,6 +131,7 @@ body {
 
 #controls {
     display: flex;
+    flex-wrap: wrap;
     justify-content: center;
     margin: 20px;
 }
@@ -131,10 +145,19 @@ body {
     font-size: 16px;
     cursor: pointer;
     transition: background-color 0.3s ease;
+    flex: 1 1 calc(50% - 10px);
+    max-width: calc(50% - 10px);
 }
 
 #controls button:hover {
     background-color: #21a1f1;
+}
+
+@media (min-width: 600px) {
+    #controls button {
+        flex: 1 1 auto;
+        max-width: none;
+    }
 }
 
 #high-score-modal {

@@ -2,7 +2,6 @@ import React, { useRef, useEffect } from 'react';
 
 function NextTetromino({ nextTetromino }) {
     const canvasRef = useRef(null);
-    const blockSize = 30;
 
     useEffect(() => {
         drawNextTetromino();
@@ -13,6 +12,8 @@ function NextTetromino({ nextTetromino }) {
         const context = canvas.getContext('2d');
 
         if (!nextTetromino) return;
+
+        const blockSize = canvas.width / 4;
 
         context.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -42,7 +43,7 @@ function NextTetromino({ nextTetromino }) {
 
     return (
         <div id="next-tetromino-container">
-            <canvas id="next-tetromino" width={blockSize * 4} height={blockSize * 4} ref={canvasRef}></canvas>
+            <canvas id="next-tetromino" width="120" height="120" ref={canvasRef}></canvas>
         </div>
     );
 }
