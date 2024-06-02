@@ -46,6 +46,7 @@ function App() {
   const { playMoveSound, playRotateSound, playDropSound, playGameOverSound } = useSounds();
 
   const handleAction = useCallback(async (action) => {
+    if (isPaused) return; // Ne pas exécuter l'action si le jeu est en pause
     try {
       const response = await fetch(action, { method: 'POST' });
       if (!response.ok) throw new Error(`Request failed with status ${response.status}`);
@@ -59,7 +60,7 @@ function App() {
     } catch (error) {
       console.error(`Failed to perform action ${action}:`, error);
     }
-  }, [setGameState, setIsGameOver, playMoveSound, playRotateSound, playDropSound, playGameOverSound]);
+  }, [isPaused, setGameState, setIsGameOver, playMoveSound, playRotateSound, playDropSound, playGameOverSound]);
 
   useDropInterval(handleAction, isPaused, isGameOver);
 
