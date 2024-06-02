@@ -62,7 +62,7 @@ function App() {
     }
   }, [isPaused, setGameState, setIsGameOver, playMoveSound, playRotateSound, playDropSound, playGameOverSound]);
 
-  useDropInterval(handleAction, isPaused, isGameOver);
+  useDropInterval(handleAction, isPaused, isGameOver, isGameStarted);
 
   const togglePause = useCallback(() => setIsPaused(!isPaused), [isPaused]);
 

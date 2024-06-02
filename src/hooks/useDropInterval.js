@@ -1,11 +1,11 @@
 import { useEffect, useRef } from 'react';
 
-const useDropInterval = (handleAction, isPaused, isGameOver) => {
+const useDropInterval = (handleAction, isPaused, isGameOver, isGameStarted) => {
     const lastDropTimeRef = useRef(Date.now());
     const dropAnimationFrameId = useRef(null);
 
     const drop = () => {
-        if (!isPaused && !isGameOver) {
+        if (isGameStarted && !isPaused && !isGameOver) {
             const now = Date.now();
             const elapsed = now - lastDropTimeRef.current;
 
@@ -19,12 +19,12 @@ const useDropInterval = (handleAction, isPaused, isGameOver) => {
     };
 
     useEffect(() => {
-        if (!isPaused && !isGameOver) {
+        if (isGameStarted && !isPaused && !isGameOver) {
             dropAnimationFrameId.current = requestAnimationFrame(drop);
         }
 
         return () => cancelAnimationFrame(dropAnimationFrameId.current);
-    }, [isPaused, isGameOver, handleAction]);
+    }, [isGameStarted, isPaused, isGameOver, handleAction]);
 };
 
 export default useDropInterval;
