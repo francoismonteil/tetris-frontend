@@ -1,0 +1,39 @@
+#game-board-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    margin: 20px auto;
+    border: 1px solid black;
+    position: relative;
+}
+
+#game-board {
+    border: 1px solid black;
+    display: block;
+    background-color: #fff;
+}
+
+.cell {
+    position: absolute;
+    box-sizing: border-box;
+    border: 1px solid #333;
+}
+
+.cell.filled {
+    background-color: gray;
+}
+
+.cell.tetromino {
+    background-color: red; /* Change color based on tetromino type */
+}
+
+#next-tetromino-container {
+    margin-top: 20px;
+    text-align: center;
+}
+
+#next-tetromino {
+    display: block;
+    border: 1px solid black;
+    background-color: #fff;
+}
