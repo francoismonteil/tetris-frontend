@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-function HighScoreForm({ score, onSubmitSuccess }) {
+function HighScoreForm({ score, onSubmitSuccess, onReplay }) {
     const [name, setName] = useState('');
 
     const handleSubmit = async (event) => {
@@ -10,13 +10,17 @@ function HighScoreForm({ score, onSubmitSuccess }) {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ name, score }),
         });
-        onSubmitSuccess();
+        onSubmitSuccess(); // Notify parent component that the form was submitted successfully
+    };
+
+    const handleClose = () => {
+        onReplay(); // Restart the game when the modal is closed
     };
 
     return (
         <div id="high-score-modal" className="modal">
             <div className="modal-content">
-                <span className="close" onClick={() => window.location.href = '/'}>&times;</span>
+                <span className="close" onClick={handleClose}>&times;</span>
                 <h2>Game Over!</h2>
                 <p>Your Score: <span id="final-score">{score}</span></p>
                 <form id="high-score-form" onSubmit={handleSubmit}>
