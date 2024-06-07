@@ -51,8 +51,6 @@ L
 src/hooks/useDropInterval.js,8\6\86aaf6340dca00d7fefd6b605bea71f8efa5775c
 D
 src/hooks/useDraw.js,b\c\bc57ac0c92e9e097d9f320a5835dc3a9d5e784e8
-U
-%src/components/ParticlesBackground.js,a\2\a2b04547e6ebe067801420c0735cf84c293034e1
 F
 src/hooks/useSounds.js,c\e\ce38a4537f64f46787f05dd073b612e8bd127ced
 L

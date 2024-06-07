@@ -10,7 +10,7 @@ const useDropInterval = (handleAction, isPaused, isGameOver, isGameStarted) => {
             const elapsed = now - lastDropTimeRef.current;
 
             if (elapsed >= 1000) {
-                handleAction('/moveDown');
+                handleAction('move?direction=down');
                 lastDropTimeRef.current = now;
             }
 

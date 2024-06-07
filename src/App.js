@@ -48,14 +48,14 @@ function App() {
   const handleAction = useCallback(async (action) => {
     if (isPaused) return; // Ne pas exécuter l'action si le jeu est en pause
     try {
-      const response = await fetch(action, { method: 'POST' });
+      const response = await fetch(`/tetris/${action}`, { method: 'POST' });
       if (!response.ok) throw new Error(`Request failed with status ${response.status}`);
       const data = await response.json();
       setGameState(data);
       setIsGameOver(data.gameOver);
-      if (action === '/moveDown') playDropSound();
-      else if (action === '/moveLeft' || action === '/moveRight') playMoveSound();
-      else if (action === '/rotate') playRotateSound();
+      if (action === 'move?direction=down') playDropSound();
+      else if (action === 'move?direction=left' || action === 'move?direction=right') playMoveSound();
+      else if (action === 'move?direction=rotate') playRotateSound();
       if (data.gameOver) playGameOverSound();
     } catch (error) {
       console.error(`Failed to perform action ${action}:`, error);
@@ -70,16 +70,16 @@ function App() {
     if (gameState && !gameState.gameOver && !isPaused) {
       switch (event.key) {
         case 'ArrowDown':
-          handleAction('/moveDown');
+          handleAction('move?direction=down');
           break;
         case 'ArrowLeft':
-          handleAction('/moveLeft');
+          handleAction('move?direction=left');
           break;
         case 'ArrowRight':
-          handleAction('/moveRight');
+          handleAction('move?direction=right');
           break;
         case 'ArrowUp':
-          handleAction('/rotate');
+          handleAction('move?direction=rotate');
           break;
         default:
           break;

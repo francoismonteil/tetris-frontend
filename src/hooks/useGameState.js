@@ -7,7 +7,7 @@ const useGameState = () => {
 
     const fetchGameState = useCallback(async () => {
         try {
-            const response = await fetch('/gameState');
+            const response = await fetch('/tetris/gameState');
             const data = await response.json();
             setGameState(data);
             setIsGameOver(data.gameOver);

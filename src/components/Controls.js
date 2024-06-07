@@ -6,19 +6,19 @@ import { motion } from 'framer-motion';
 function Controls({ handleAction, togglePause, isPaused }) {
     return (
         <div id="controls">
-            <motion.button onClick={() => handleAction('/moveDown')} whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
+            <motion.button onClick={() => handleAction('move?direction=down')} whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
                 <FaArrowDown /> Move Down
             </motion.button>
-            <motion.button onClick={() => handleAction('/moveLeft')} whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
+            <motion.button onClick={() => handleAction('move?direction=left')} whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
                 <FaArrowLeft /> Move Left
             </motion.button>
-            <motion.button onClick={() => handleAction('/moveRight')} whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
+            <motion.button onClick={() => handleAction('move?direction=right')} whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
                 <FaArrowRight /> Move Right
             </motion.button>
-            <motion.button onClick={() => handleAction('/rotate')} whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
+            <motion.button onClick={() => handleAction('move?direction=rotate')} whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
                 <FiRotateCcw /> Rotate
             </motion.button>
-            <motion.button onClick={() => handleAction('/restart')} whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
+            <motion.button onClick={() => handleAction('restart')} whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
                 <FaRedo /> Restart
             </motion.button>
             <motion.button onClick={togglePause} whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
