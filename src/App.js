@@ -96,9 +96,9 @@ function App() {
 
   const handleReplay = useCallback(async () => {
     try {
-      await fetch('/restart', { method: 'POST' });
+      await handleAction('restart');
       setShowHighScoreForm(true);
-      fetchGameState();
+      await fetchGameState();
       setIsGameOver(false);
     } catch (error) {
       console.error('Failed to restart the game:', error);
